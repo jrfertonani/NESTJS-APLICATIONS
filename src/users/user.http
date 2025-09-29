@@ -8,7 +8,7 @@ POST  http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "joão"
+  "name": "joão 02"
 }
 
 ###
@@ -21,4 +21,4 @@ Content-Type: application/json
 
 
 ###
-DELETE  http://localhost:3000/users/1
+DELETE  http://localhost:3000/users/2
