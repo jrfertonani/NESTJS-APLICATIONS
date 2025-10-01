@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  NotAcceptableException,
+  NotFoundException,
+  HttpCode,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,17 +29,30 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(+id);
+    if (!user) throw new NotAcceptableException(`User ${id} not found!`);
+    return user;
+  }
+
+  @Get(':id/animals')
+  async findBy(@Param('id') id: string) {
+    const user = await this.usersService.findOneWithAnimal(+id);
+    if (!user) {
+      throw new NotFoundException(`User ${id} not found!`);
+    }
+    return user;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @HttpCode(204)
+  async remove(@Param('id') id: string) {
+    const user = await this.usersService.remove(+id);
+    if (!user) throw new NotFoundException(`User ${id} not found!`);
   }
 }

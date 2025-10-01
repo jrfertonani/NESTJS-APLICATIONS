@@ -1,0 +1,24 @@
+GET http://localhost:3000/animals
+
+###
+GET  http://localhost:3000/animals/2
+
+###
+POST http://localhost:3000/animals
+Content-Type: application/json
+
+{
+  "name": "gato "
+}
+
+###
+PATCH http://localhost:3000/animals/2
+Content-Type: application/json
+
+{
+  "name": "dog 3"
+}
+
+
+###
+DELETE  http://localhost:3000/animals/5
