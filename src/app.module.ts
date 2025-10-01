@@ -8,6 +8,7 @@ import { AnimalsModule } from './animals/animals.module';
 import { TutorModule } from './tutor/tutor.module';
 import { ProdutosModule } from './produtos/produtos.module';
 import { ConsultasModule } from './consultas/consultas.module';
+import { VeterinarioModule } from './veterinario/veterinario.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConsultasModule } from './consultas/consultas.module';
     TutorModule,
     ProdutosModule,
     ConsultasModule,
+    VeterinarioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
