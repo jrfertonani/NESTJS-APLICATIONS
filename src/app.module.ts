@@ -9,6 +9,7 @@ import { TutorModule } from './tutor/tutor.module';
 import { ProdutosModule } from './produtos/produtos.module';
 import { ConsultasModule } from './consultas/consultas.module';
 import { VeterinarioModule } from './veterinario/veterinario.module';
+import { HistoricoMedicoModule } from './historico-medico/historico-medico.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { VeterinarioModule } from './veterinario/veterinario.module';
     ProdutosModule,
     ConsultasModule,
     VeterinarioModule,
+    HistoricoMedicoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

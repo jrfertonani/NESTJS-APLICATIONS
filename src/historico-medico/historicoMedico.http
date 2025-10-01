@@ -1,0 +1,24 @@
+GET http://localhost:3000/historicoMedico
+
+###
+GET  http://localhost:3000/historicoMedico/2
+
+###
+POST http://localhost:3000/historicoMedico
+Content-Type: application/json
+
+{
+  "name": "gato "
+}
+
+###
+PATCH http://localhost:3000/historicoMedico/2
+Content-Type: application/json
+
+{
+  "name": "dog 3"
+}
+
+
+###
+DELETE  http://localhost:3000/historicoMedico/5
