@@ -10,6 +10,7 @@ import { ProdutosModule } from './produtos/produtos.module';
 import { ConsultasModule } from './consultas/consultas.module';
 import { VeterinarioModule } from './veterinario/veterinario.module';
 import { HistoricoMedicoModule } from './historico-medico/historico-medico.module';
+import { PetsModule } from './pets/pets.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { HistoricoMedicoModule } from './historico-medico/historico-medico.modul
     ConsultasModule,
     VeterinarioModule,
     HistoricoMedicoModule,
+    PetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
