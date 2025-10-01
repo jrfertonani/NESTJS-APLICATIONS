@@ -15,7 +15,7 @@ export class Animal {
   @Column()
   name: string;
 
-  @ManyToOne(() => Tutor, (tutor) => tutor.animals, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Tutor, (tutor) => tutor.pets, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'tutorId' })
   tutor: Tutor;
 

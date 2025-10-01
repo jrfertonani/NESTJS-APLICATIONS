@@ -1,34 +1,24 @@
 GET http://localhost:3000/pets
 
 ###
-GET  http://localhost:3000/pets/1
+GET  http://localhost:3000/pets/2
 
 ###
 POST http://localhost:3000/pets
 Content-Type: application/json
 
 {
-  "name": "Bob Vendedor",
-  "email": "bob@vendedor.com",
-  "animals": [ 
-    {
-      "name": "Pingo"
-    },
-    {
-      "name": "Lola"
-    }
-  ]
+  "name": "Pitoco"
 }
 
 ###
-PATCH http://localhost:3000/pets/1
+PATCH http://localhost:3000/pets/2
 Content-Type: application/json
 
 {
-  "name": "joão 4",
-  "email": "email@email.com"
+  "name": "Pitocos2"
 }
 
 
 ###
-DELETE  http://localhost:3000/pets/1
+DELETE  http://localhost:3000/pets/3

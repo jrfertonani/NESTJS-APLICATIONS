@@ -28,7 +28,7 @@ export class TutorService {
   async findOneAnimal(id: number): Promise<Tutor | null> {
     const tutor = await this.tutorRepository.findOne({
       where: { id },
-      relations: ['animals'],
+      relations: ['pets'],
     });
     return tutor;
   }

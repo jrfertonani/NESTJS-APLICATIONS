@@ -5,7 +5,7 @@ GET  http://localhost:3000/tutor/1
 
 ###
 
-GET  http://localhost:3000/tutor/2/animals
+GET  http://localhost:3000/tutor/2/pets
 
 ###
 POST http://localhost:3000/tutor

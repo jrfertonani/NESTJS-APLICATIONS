@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  NotFoundException,
+  HttpCode,
+} from '@nestjs/common';
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
@@ -18,17 +28,23 @@ export class PetsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.petsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const pet = await this.petsService.findOne(+id);
+    if (!pet) throw new NotFoundException(`Id ${id} not found!`);
+    return pet;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
-    return this.petsService.update(+id, updatePetDto);
+  async update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
+    const pet = await this.petsService.update(+id, updatePetDto);
+    if (!pet) throw new NotFoundException(`Id ${id} not found!`);
+    return pet;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.petsService.remove(+id);
+  @HttpCode(204)
+  async remove(@Param('id') id: string) {
+    const pet = await this.petsService.remove(+id);
+    if (!pet) throw new NotFoundException(`Id ${id} not found!`);
   }
 }

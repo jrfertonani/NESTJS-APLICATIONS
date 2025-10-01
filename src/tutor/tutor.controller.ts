@@ -11,7 +11,6 @@ import {
 import { TutorService } from './tutor.service';
 import { CreateTutorDto } from './dto/create-tutor.dto';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
-import { Tutor } from './entities/tutor.entity';
 
 @Controller('tutor')
 export class TutorController {
@@ -34,7 +33,7 @@ export class TutorController {
     return tutor;
   }
 
-  @Get(':id/animals')
+  @Get(':id/pets')
   findOneAnimal(@Param('id') id: string) {
     return this.tutorService.findOneAnimal(+id);
   }

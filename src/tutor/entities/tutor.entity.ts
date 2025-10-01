@@ -1,4 +1,4 @@
-import { Animal } from 'src/animals/entities/animal.entity';
+import { Pet } from 'src/pets/entities/pet.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -12,8 +12,8 @@ export class Tutor {
   @Column({ nullable: true })
   email: string;
 
-  @OneToMany(() => Animal, (animal) => animal.tutor, {
+  @OneToMany(() => Pet, (pet) => pet.tutor, {
     cascade: true,
   })
-  animals: Animal[];
+  pets: Pet[];
 }
