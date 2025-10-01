@@ -5,21 +5,21 @@ GET  http://localhost:3000/tutor/1
 
 ###
 
-GET  http://localhost:3000/tutor/2/pets
+GET  http://localhost:3000/tutor/1/pets
 
 ###
 POST http://localhost:3000/tutor
 Content-Type: application/json
 
 {
-  "name": "Bob Vendedor",
-  "email": "bob@vendedor.com",
-  "animals": [ 
+  "name": "Ademir",
+  "email": "email@email.com",
+  "pets": [ 
     {
-      "name": "Pingo"
+      "name": "Pitoco"
     },
     {
-      "name": "Lola"
+      "name": "Neguinho"
     }
   ]
 }
@@ -29,9 +29,18 @@ PATCH http://localhost:3000/tutor/1
 Content-Type: application/json
 
 {
-  "name": "joão 4",
-  "email": "email@email.com"
+  "name": "Ademir 2",
+  "email": "email@email.com",
+  "pets": [ 
+    {
+      "name": "Pitocos2"
+    },
+    {
+      "name": "Neguinhos2"
+    }
+  ]
 }
+
 
 
 ###
