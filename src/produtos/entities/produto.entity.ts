@@ -1,1 +1,5 @@
-export class Produto {}
+export class Produto {
+  // ração,
+  // brinquedos,
+  //  acessórios
+}
