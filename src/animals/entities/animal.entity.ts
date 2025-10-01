@@ -18,4 +18,6 @@ export class Animal {
   @ManyToOne(() => Tutor, (tutor) => tutor.animals, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'tutorId' })
   tutor: Tutor;
+
+  //espécie
 }

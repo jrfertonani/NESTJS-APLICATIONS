@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { dataSourceOptions } from 'db/data-source';
 import { AnimalsModule } from './animals/animals.module';
 import { TutorModule } from './tutor/tutor.module';
+import { ProdutosModule } from './produtos/produtos.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TutorModule } from './tutor/tutor.module';
     UsersModule,
     AnimalsModule,
     TutorModule,
+    ProdutosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
