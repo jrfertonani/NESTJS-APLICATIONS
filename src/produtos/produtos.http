@@ -1,34 +1,24 @@
 GET http://localhost:3000/produtos
 
 ###
-GET  http://localhost:3000/produtos/1
+GET  http://localhost:3000/produtos/3
 
 ###
 POST http://localhost:3000/produtos
 Content-Type: application/json
 
 {
-  "name": "Bob Vendedor",
-  "email": "bob@vendedor.com",
-  "animals": [ 
-    {
-      "name": "Pingo"
-    },
-    {
-      "name": "Lola"
-    }
-  ]
+  "name": "Bola"
 }
 
 ###
-PATCH http://localhost:3000/produtos/1
+PATCH http://localhost:3000/produtos/2
 Content-Type: application/json
 
 {
-  "name": "joão 4",
-  "email": "email@email.com"
+  "name": "osso"
 }
 
 
 ###
-DELETE  http://localhost:3000/produtos/1
+DELETE  http://localhost:3000/produtos/2

@@ -19,5 +19,4 @@ export class Pet {
   @JoinColumn({ name: 'tutorId' })
   tutor: Tutor;
 
-  //espécie
 }

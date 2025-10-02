@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVeterinarioDto } from './dto/create-veterinario.dto';
 import { UpdateVeterinarioDto } from './dto/update-veterinario.dto';
+import { Veterinario } from './entities/veterinario.entity';
+import type { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class VeterinarioService {
+  constructor(
+    @InjectRepository(Veterinario)
+    private veterinarioRepository: Repository<Veterinario>,
+  ) {}
+
   create(createVeterinarioDto: CreateVeterinarioDto) {
-    return 'This action adds a new veterinario';
+    const vet = this.veterinarioRepository.create(createVeterinarioDto);
+    return this.veterinarioRepository.save(vet);
   }
 
-  findAll() {
-    return `This action returns all veterinario`;
+  async findAll() {
+    return await this.veterinarioRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} veterinario`;
+  async findOne(id: number) {
+    return await this.veterinarioRepository.findOneBy({ id });
   }
 
-  update(id: number, updateVeterinarioDto: UpdateVeterinarioDto) {
-    return `This action updates a #${id} veterinario`;
+  async update(id: number, updateVeterinarioDto: UpdateVeterinarioDto) {
+    const vet = await this.veterinarioRepository.findOneBy({ id });
+    if (!vet) return null;
+    this.veterinarioRepository.merge(vet, updateVeterinarioDto);
+    return this.veterinarioRepository.save(vet);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} veterinario`;
+  async remove(id: number) {
+    const vet = await this.veterinarioRepository.findOneBy({ id });
+    if (!vet) return null;
+    return this.veterinarioRepository.remove(vet);
   }
 }

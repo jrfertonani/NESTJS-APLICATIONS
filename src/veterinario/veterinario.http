@@ -1,34 +1,24 @@
-GET http://localhost:3000/veterinarios
+GET http://localhost:3000/veterinario
 
 ###
-GET  http://localhost:3000/veterinarios/1
+GET  http://localhost:3000/veterinario/2
 
 ###
-POST http://localhost:3000/veterinarios
+POST http://localhost:3000/veterinario
 Content-Type: application/json
 
 {
-  "name": "Bob Vendedor",
-  "email": "bob@vendedor.com",
-  "animals": [ 
-    {
-      "name": "Pingo"
-    },
-    {
-      "name": "Lola"
-    }
-  ]
+  "name": "Sebastião"
 }
 
 ###
-PATCH http://localhost:3000/veterinarios/1
+PATCH http://localhost:3000/veterinario/2
 Content-Type: application/json
 
 {
-  "name": "joão 4",
-  "email": "email@email.com"
+  "name": "jose 2"
 }
 
 
 ###
-DELETE  http://localhost:3000/veterinarios/1
+DELETE  http://localhost:3000/veterinario/2
