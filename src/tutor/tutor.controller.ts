@@ -9,16 +9,33 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { TutorService } from './tutor.service';
-import { CreateTutorDto } from './dto/create-tutor.dto';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
+import type { Tutor } from './entities/tutor.entity';
+import type { CreateTutorDto } from './dto/create-tutor.dto';
 
 @Controller('tutor')
 export class TutorController {
   constructor(private readonly tutorService: TutorService) {}
 
-  @Post()
-  create(@Body() createTutorDto: CreateTutorDto) {
-    return this.tutorService.create(createTutorDto);
+  // @Post()
+  // async create(@Body() createTutorDto: CreateTutorDto) {
+  //   return this.tutorService.createTutor(createTutorDto);
+  // }
+
+  @Post(':id/add-produtos')
+  async createTutoresProdutos(
+    @Param('id') tutorId: number,
+    @Body('produtoIds') produtoIds: number,
+  ): Promise<Tutor> {
+    return this.tutorService.addProdutoToExistingTutor(tutorId, produtoIds);
+  }
+
+  @Patch(':id/add-pet')
+  async addPet(
+    @Param('id') tutorId: number,
+    @Body('petIds') petIds: number,
+  ): Promise<Tutor> {
+    return this.tutorService.addPetToExistingTutor(tutorId, petIds);
   }
 
   @Get()
@@ -36,6 +53,11 @@ export class TutorController {
   @Get(':id/pets')
   findOneAnimal(@Param('id') id: string) {
     return this.tutorService.findOneAnimal(+id);
+  }
+
+  @Get(':id/produtos')
+  findOneProduto(@Param('id') id: string) {
+    return this.tutorService.findOneProduto(+id);
   }
 
   @Patch(':id')

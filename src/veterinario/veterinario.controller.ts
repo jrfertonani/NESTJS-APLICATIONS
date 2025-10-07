@@ -11,6 +11,7 @@ import {
 import { VeterinarioService } from './veterinario.service';
 import { CreateVeterinarioDto } from './dto/create-veterinario.dto';
 import { UpdateVeterinarioDto } from './dto/update-veterinario.dto';
+import type { Veterinario } from './entities/veterinario.entity';
 
 @Controller('veterinario')
 export class VeterinarioController {
@@ -47,5 +48,21 @@ export class VeterinarioController {
   async remove(@Param('id') id: string) {
     const vet = await this.veterinarioService.remove(+id);
     if (!vet) throw new NotFoundException(`ID ${id} not found!`);
+  }
+
+  @Patch(':id/add-pet')
+  async addPet(
+    @Param('id') veterinarioId: number,
+    @Body('petIds') petIds: number,
+  ): Promise<Veterinario> {
+    return this.veterinarioService.addPetToExistingVeterinario(
+      veterinarioId,
+      petIds,
+    );
+  }
+
+  @Get(':id/pets')
+  findOnePet(@Param('id') id: string) {
+    return this.veterinarioService.findOnePet(+id);
   }
 }

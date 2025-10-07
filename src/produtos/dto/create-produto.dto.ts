@@ -5,3 +5,4 @@ export class CreateProdutoDto {
   @IsString({ message: 'O nome deve ser uma string.' })
   name: string;
 }
+ 

@@ -1,7 +1,7 @@
 GET http://localhost:3000/veterinario
 
 ###
-GET  http://localhost:3000/veterinario/2
+GET  http://localhost:3000/veterinario/3
 
 ###
 POST http://localhost:3000/veterinario
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH http://localhost:3000/veterinario/2
+PATCH http://localhost:3000/veterinario/3
 Content-Type: application/json
 
 {
@@ -22,3 +22,18 @@ Content-Type: application/json
 
 ###
 DELETE  http://localhost:3000/veterinario/2
+
+
+
+
+###
+PATCH http://localhost:3000/veterinario/4/add-pet
+Content-Type: application/json
+
+{
+  "petIds": 41
+}
+
+
+###
+GET http://localhost:3000/veterinario/4/pets

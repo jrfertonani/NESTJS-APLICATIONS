@@ -1,24 +1,34 @@
-import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
+  IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
-import { CreatePetDto } from 'src/pets/dto/create-pet.dto';
 
 export class CreateTutorDto {
-  @IsNotEmpty({ message: 'O nome é obrigatório.' })
-  @IsString({ message: 'O nome deve ser uma string.' })
+  @IsNotEmpty({ message: 'O name é obrigatório.' })
+  @IsString({ message: 'O name deve ser uma string.' })
   name: string;
 
   @IsNotEmpty({ message: 'O e-mail é obrigatório.' })
   @IsEmail({}, { message: 'Formato de e-mail inválido.' })
   email: string;
 
-  @IsArray({ message: 'A lista de pets deve ser um array.' })
-  @ValidateNested({ each: true })
-  @Type(() => CreatePetDto)
-  pets: CreatePetDto[];
+  @IsOptional()
+  @IsArray({ message: 'A lista de IDs de pets deve ser um array.' })
+  @IsNumber(
+    {},
+    { each: true, message: 'Cada item deve ser um ID numérico de pet.' }, // 💡 each: true
+  )
+  petIds: number[];
+
+  @IsOptional()
+  @IsArray({ message: 'A lista de IDs de produto deve ser um array.' })
+  @IsNumber(
+    {},
+    { each: true, message: 'Cada item deve ser um ID numérico de produtos.' }, // 💡 each: true
+  )
+  produtoIds: number[];
 }

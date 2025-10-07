@@ -1,7 +1,7 @@
 GET http://localhost:3000/pets
 
 ###
-GET  http://localhost:3000/pets/2
+GET  http://localhost:3000/pets/41
 
 ###
 POST http://localhost:3000/pets
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH http://localhost:3000/pets/2
+PATCH http://localhost:3000/pets/41
 Content-Type: application/json
 
 {
@@ -22,3 +22,8 @@ Content-Type: application/json
 
 ###
 DELETE  http://localhost:3000/pets/3
+
+
+###
+//findOneVeterinarios
+GET  http://localhost:3000/pets/41/veterinarios

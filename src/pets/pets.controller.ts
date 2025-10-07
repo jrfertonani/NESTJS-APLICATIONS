@@ -12,6 +12,7 @@ import {
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
+import type { Pet } from './entities/pet.entity';
 
 @Controller('pets')
 export class PetsController {
@@ -46,5 +47,12 @@ export class PetsController {
   async remove(@Param('id') id: string) {
     const pet = await this.petsService.remove(+id);
     if (!pet) throw new NotFoundException(`Id ${id} not found!`);
+  }
+
+  
+
+  @Get(':id/veterinarios')
+  findOneVeterinario(@Param('id') id: string) {
+    return this.petsService.findOneVeterinario(+id);
   }
 }

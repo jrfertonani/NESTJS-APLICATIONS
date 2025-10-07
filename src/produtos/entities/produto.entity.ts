@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Tutor } from 'src/tutor/entities/tutor.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Produto {
@@ -7,6 +14,10 @@ export class Produto {
 
   @Column()
   name: string;
+
+  @ManyToOne(() => Tutor, (tutor) => tutor.produtos, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'tutorId' })
+  tutor: Tutor;
 
   // ração,
   // brinquedos,

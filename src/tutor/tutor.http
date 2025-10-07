@@ -4,44 +4,55 @@ GET http://localhost:3000/tutor
 GET  http://localhost:3000/tutor/1
 
 ###
-
+//findOneAnimal
 GET  http://localhost:3000/tutor/1/pets
+
+
+###
+//findOneProduto
+GET  http://localhost:3000/tutor/1/produtos
 
 ###
 POST http://localhost:3000/tutor
 Content-Type: application/json
 
 {
-  "name": "Ademir",
-  "email": "email@email.com",
-  "pets": [ 
-    {
-      "name": "Pitoco"
-    },
-    {
-      "name": "Neguinho"
-    }
-  ]
+  "name": "Nome do Tutor", 
+  "email": "email@teste.com",
 }
+
+###
+//addPetToExistingTutor
+POST  http://localhost:3000/tutor/1/add-produtos
+Content-Type: application/json
+
+{
+  "produtoIds": 3
+}
+
 
 ###
 PATCH http://localhost:3000/tutor/1
 Content-Type: application/json
 
 {
-  "name": "Ademir 2",
+  "name": "Pedross",
   "email": "email@email.com",
-  "pets": [ 
-    {
-      "name": "Pitocos2"
-    },
-    {
-      "name": "Neguinhos2"
-    }
-  ]
 }
 
 
 
 ###
-DELETE  http://localhost:3000/tutor/1
+//addPetToExistingTutor
+PATCH http://localhost:3000/tutor/2/add-pet
+Content-Type: application/json
+
+{
+  "petIds": 10
+}
+
+
+###
+DELETE  http://localhost:3000/tutor/61
+
+
