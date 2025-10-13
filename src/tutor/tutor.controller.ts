@@ -11,7 +11,6 @@ import {
 import { TutorService } from './tutor.service';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
 import type { Tutor } from './entities/tutor.entity';
-import type { CreateTutorDto } from './dto/create-tutor.dto';
 
 @Controller('tutor')
 export class TutorController {

@@ -1,26 +1,167 @@
-import { Injectable } from '@nestjs/common';
+import { Pet } from './../pets/entities/pet.entity';
+import { Consulta } from './entities/consulta.entity';
+import { Produto } from './../produtos/entities/produto.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, type Repository } from 'typeorm';
+import { Veterinario } from 'src/veterinario/entities/veterinario.entity';
 
 @Injectable()
 export class ConsultasService {
+  constructor(
+    // @InjectRepository(Tutor)
+    // private tutorRepository: Repository<Tutor>,
+    @InjectRepository(Pet)
+    private readonly petRepository: Repository<Pet>,
+    @InjectRepository(Produto)
+    private readonly produtoRepository: Repository<Produto>,
+    @InjectRepository(Veterinario)
+    private readonly veterinarioRepository: Repository<Veterinario>,
+    @InjectRepository(Consulta)
+    private readonly consultaRepository: Repository<Consulta>,
+  ) {}
+
   create(createConsultaDto: CreateConsultaDto) {
-    return 'This action adds a new consulta';
+    const consulta = this.consultaRepository.create(createConsultaDto);
+    return this.consultaRepository.save(consulta);
   }
 
   findAll() {
-    return `This action returns all consultas`;
+    return this.consultaRepository.find();
+  }
+  async findConsulta(id: number): Promise<Consulta | null> {
+    return await this.consultaRepository.findOneBy({ id });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} consulta`;
-  }
+  async updateConsulta(
+    id: number,
+    updateConsultaDto: UpdateConsultaDto,
+  ): Promise<Consulta> {
+    // 1. Encontrar a Consulta existente com os relacionamentos carregados
+    const consulta = await this.consultaRepository.findOne({
+      where: { id },
+      relations: ['pet', 'veterinarios', 'produtos'], // Carrega os arrays atuais
+    });
 
-  update(id: number, updateConsultaDto: UpdateConsultaDto) {
-    return `This action updates a #${id} consulta`;
+    if (!consulta) {
+      throw new NotFoundException(`Consulta com ID ${id} não encontrada.`);
+    }
+
+    // 2. Atualizar campos simples (dataConsulta e observacoes)
+    // Isso usa o spread operator, mas garantimos que apenas os campos do DTO sejam usados.
+    this.consultaRepository.merge(consulta, updateConsultaDto);
+
+    // 3. ATUALIZAÇÃO DO RELACIONAMENTO ManyToOne (Pet)
+    if (updateConsultaDto.petIds && updateConsultaDto.petIds.length > 0) {
+      // Como é ManyToOne, esperamos apenas 1 ID. Pegamos o primeiro.
+      const petId = updateConsultaDto.petIds[0];
+      const pet = await this.petRepository.findOneBy({ id: petId });
+
+      if (!pet) {
+        throw new NotFoundException(`Pet com ID ${petId} não encontrado.`);
+      }
+
+      // Atribuição direta do objeto Pet (resolve o erro de array anterior)
+      consulta.pet = pet;
+    }
+
+    // 4. ATUALIZAÇÃO DO RELACIONAMENTO ManyToMany (Veterinarios)
+    if (updateConsultaDto.veterinarioIds) {
+      if (updateConsultaDto.veterinarioIds.length > 0) {
+        const veterinarios = await this.veterinarioRepository.findBy({
+          id: In(updateConsultaDto.veterinarioIds),
+        });
+
+        if (veterinarios.length !== updateConsultaDto.veterinarioIds.length) {
+          // Lógica para lidar com IDs de veterinário não encontrados
+          throw new NotFoundException('Veterinários não foram encontrados.');
+        }
+
+        // Atribui o novo array de Veterinarios. TypeORM fará o sync na tabela de junção.
+        consulta.veterinarios = veterinarios;
+      } else {
+        // Se um array vazio for enviado, limpa o relacionamento
+        consulta.veterinarios = [];
+      }
+    }
+
+    // 5. ATUALIZAÇÃO DO RELACIONAMENTO ManyToMany (Produtos)
+    if (updateConsultaDto.produtoIds) {
+      if (updateConsultaDto.produtoIds.length > 0) {
+        const produtos = await this.produtoRepository.findBy({
+          id: In(updateConsultaDto.produtoIds),
+        });
+
+        if (produtos.length !== updateConsultaDto.produtoIds.length) {
+          // Lógica para lidar com IDs de produto não encontrados
+          throw new NotFoundException('Produtos não foram encontrados.');
+        }
+
+        // Atribui o novo array de Produtos. TypeORM fará o sync na tabela de junção.
+        consulta.produtos = produtos;
+      } else {
+        // Se um array vazio for enviado, limpa o relacionamento
+        consulta.produtos = [];
+      }
+    }
+
+    // 6. Salvar e retornar a entidade atualizada
+    return this.consultaRepository.save(consulta);
   }
 
   remove(id: number) {
     return `This action removes a #${id} consulta`;
+  }
+
+  async registroConsulta(input: CreateConsultaDto) {
+    const pet = await this.petRepository.findBy({ id: In(input.petIds || []) });
+    if (input.petIds && pet.length !== input.petIds.length) {
+      throw new NotFoundException('Um ou mais pets não foram encontrados.');
+    }
+
+    const veterinarios = await this.veterinarioRepository.findBy({
+      id: In(input.veterinarioIds || []),
+    });
+    if (
+      input.veterinarioIds &&
+      veterinarios.length !== input.veterinarioIds.length
+    ) {
+      throw new NotFoundException(
+        'Um ou mais veterinários não foram encontrados.',
+      );
+    }
+
+    const produtos = await this.produtoRepository.findBy({
+      id: In(input.produtoIds || []),
+    });
+    if (input.produtoIds && produtos.length !== input.produtoIds.length) {
+      throw new NotFoundException('Um ou mais produtos não foram encontrados.');
+    }
+
+    const cadastrarConsulta = this.consultaRepository.create({
+      ...input,
+      pet: pet[pet.length - 1],
+      produtos,
+      veterinarios,
+    });
+
+    const resultadoConsulta =
+      await this.consultaRepository.save(cadastrarConsulta);
+
+    return { resultadoConsulta };
+  }
+
+  async buscaCosulta(id: number): Promise<Consulta> {
+    const consulta = await this.consultaRepository.findOne({
+      where: { id },
+      relations: ['pet', 'produtos', 'veterinarios'],
+    });
+    console.log('Input Consultas: pet, produtos, veterinarios', consulta);
+    if (!consulta) {
+      throw new NotFoundException(`Consulta com ID ${id} não encontrada.`);
+    }
+    return consulta;
   }
 }

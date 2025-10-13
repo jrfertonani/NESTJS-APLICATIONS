@@ -12,7 +12,6 @@ import {
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
-import type { Pet } from './entities/pet.entity';
 
 @Controller('pets')
 export class PetsController {

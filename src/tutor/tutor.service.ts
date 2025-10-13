@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTutorDto } from './dto/create-tutor.dto';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
 import { Tutor } from './entities/tutor.entity';
 import type { Repository } from 'typeorm';
@@ -74,6 +73,7 @@ export class TutorService {
 
     return this.tutorRepository.save(tutor);
   }
+  
   async findAll() {
     return await this.tutorRepository.find();
   }

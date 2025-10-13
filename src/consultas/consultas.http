@@ -1,34 +1,37 @@
 GET http://localhost:3000/consultas
 
 ###
-GET  http://localhost:3000/consultas/1
+GET  http://localhost:3000/consultas/30
+
 
 ###
-POST http://localhost:3000/consultas
+
+POST http://localhost:3000/consultas/teste
 Content-Type: application/json
 
 {
-  "name": "Bob Vendedor",
-  "email": "bob@vendedor.com",
-  "animals": [ 
-    {
-      "name": "Pingo"
-    },
-    {
-      "name": "Lola"
-    }
-  ]
+  "veterinarioIds": [4], 
+  "petIds": [9], 
+  "produtoIds": [3], 
+  "observacoes": "Gengivite leve, prescrevi anti-inflamatório.",
+  "dataConsulta": "2025-11-10"
 }
 
+
+
 ###
-PATCH http://localhost:3000/consultas/1
+PATCH http://localhost:3000/consultas/30
 Content-Type: application/json
 
 {
-  "name": "joão 4",
-  "email": "email@email.com"
+  "veterinarioIds": [3], 
+  "petIds": [1], 
+  "produtoIds": [4], 
+  "observacoes": "Consulta alterada"
 }
 
-
 ###
-DELETE  http://localhost:3000/consultas/1
+DELETE  http://localhost:3000/consultas/30
+
+
+
