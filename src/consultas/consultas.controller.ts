@@ -17,13 +17,8 @@ export class ConsultasController {
   constructor(private readonly consultasService: ConsultasService) {}
 
   @Post()
-  create(@Body() createConsultaDto: CreateConsultaDto) {
-    return this.consultasService.create(createConsultaDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.consultasService.findAll();
+  createConsult(@Body() createConsultaDto: CreateConsultaDto) {
+    return this.consultasService.registroConsulta(createConsultaDto);
   }
 
   @Get(':id')
@@ -33,17 +28,21 @@ export class ConsultasController {
     return consulta;
   }
 
- 
+  @Get()
+  findAll() {
+    return this.consultasService.findAll();
+  }
+
   @Patch(':id')
   async update(
     // 1. Captura o ID da URL
-    @Param('id') consultaId: string, 
+    @Param('id') consultaId: string,
     // 2. Captura TODO o corpo da requisição como um objeto UpdateConsultaDto
     @Body() updateConsultaDto: UpdateConsultaDto,
   ): Promise<Consulta> {
     // 3. Converte o ID para número (Param() geralmente retorna string)
     const id = parseInt(consultaId, 10);
-    
+
     // 4. Chama o service, passando o ID e o DTO completo
     return this.consultasService.updateConsulta(id, updateConsultaDto);
   }
@@ -51,10 +50,5 @@ export class ConsultasController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.consultasService.remove(+id);
-  }
-
-  @Post('teste')
-  createConsult(@Body() createConsultaDto: CreateConsultaDto) {
-    return this.consultasService.registroConsulta(createConsultaDto);
   }
 }

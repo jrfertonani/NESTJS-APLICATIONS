@@ -1,12 +1,12 @@
 GET http://localhost:3000/consultas
 
 ###
-GET  http://localhost:3000/consultas/30
+GET  http://localhost:3000/consultas/1
 
 
 ###
 
-POST http://localhost:3000/consultas/teste
+POST http://localhost:3000/consultas
 Content-Type: application/json
 
 {
@@ -14,24 +14,25 @@ Content-Type: application/json
   "petIds": [9], 
   "produtoIds": [3], 
   "observacoes": "Gengivite leve, prescrevi anti-inflamatório.",
-  "dataConsulta": "2025-11-10"
+  "dataConsulta": "2025-10-13"
 }
 
 
 
 ###
-PATCH http://localhost:3000/consultas/30
+PATCH http://localhost:3000/consultas/1
 Content-Type: application/json
 
 {
-  "veterinarioIds": [3], 
+  "veterinarioIds": [5], 
   "petIds": [1], 
   "produtoIds": [4], 
-  "observacoes": "Consulta alterada"
+  "observacoes": "Consulta alterada via PATCH",
+  "dataConsulta": "2025-10-13T01:57:26.000Z"
 }
 
 ###
-DELETE  http://localhost:3000/consultas/30
+DELETE  http://localhost:3000/consultas/40
 
 
 

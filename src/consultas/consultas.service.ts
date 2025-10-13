@@ -23,16 +23,58 @@ export class ConsultasService {
     private readonly consultaRepository: Repository<Consulta>,
   ) {}
 
-  create(createConsultaDto: CreateConsultaDto) {
-    const consulta = this.consultaRepository.create(createConsultaDto);
-    return this.consultaRepository.save(consulta);
+  async registroConsulta(input: CreateConsultaDto) {
+    const pet = await this.petRepository.findBy({ id: In(input.petIds || []) });
+    if (input.petIds && pet.length !== input.petIds.length) {
+      throw new NotFoundException('Um ou mais pets não foram encontrados.');
+    }
+
+    const veterinarios = await this.veterinarioRepository.findBy({
+      id: In(input.veterinarioIds || []),
+    });
+    if (
+      input.veterinarioIds &&
+      veterinarios.length !== input.veterinarioIds.length
+    ) {
+      throw new NotFoundException(
+        'Um ou mais veterinários não foram encontrados.',
+      );
+    }
+
+    const produtos = await this.produtoRepository.findBy({
+      id: In(input.produtoIds || []),
+    });
+    if (input.produtoIds && produtos.length !== input.produtoIds.length) {
+      throw new NotFoundException('Um ou mais produtos não foram encontrados.');
+    }
+
+    const cadastrarConsulta = this.consultaRepository.create({
+      ...input,
+      pet: pet[pet.length - 1],
+      produtos,
+      veterinarios,
+    });
+
+    const resultadoConsulta =
+      await this.consultaRepository.save(cadastrarConsulta);
+
+    return { resultadoConsulta };
+  }
+
+  async buscaCosulta(id: number): Promise<Consulta> {
+    const consulta = await this.consultaRepository.findOne({
+      where: { id },
+      relations: ['pet', 'produtos', 'veterinarios'],
+    });
+    console.log('Input Consultas: pet, produtos, veterinarios', consulta);
+    if (!consulta) {
+      throw new NotFoundException(`Consulta com ID ${id} não encontrada.`);
+    }
+    return consulta;
   }
 
   findAll() {
     return this.consultaRepository.find();
-  }
-  async findConsulta(id: number): Promise<Consulta | null> {
-    return await this.consultaRepository.findOneBy({ id });
   }
 
   async updateConsulta(
@@ -111,57 +153,11 @@ export class ConsultasService {
     return this.consultaRepository.save(consulta);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} consulta`;
-  }
-
-  async registroConsulta(input: CreateConsultaDto) {
-    const pet = await this.petRepository.findBy({ id: In(input.petIds || []) });
-    if (input.petIds && pet.length !== input.petIds.length) {
-      throw new NotFoundException('Um ou mais pets não foram encontrados.');
-    }
-
-    const veterinarios = await this.veterinarioRepository.findBy({
-      id: In(input.veterinarioIds || []),
-    });
-    if (
-      input.veterinarioIds &&
-      veterinarios.length !== input.veterinarioIds.length
-    ) {
-      throw new NotFoundException(
-        'Um ou mais veterinários não foram encontrados.',
-      );
-    }
-
-    const produtos = await this.produtoRepository.findBy({
-      id: In(input.produtoIds || []),
-    });
-    if (input.produtoIds && produtos.length !== input.produtoIds.length) {
-      throw new NotFoundException('Um ou mais produtos não foram encontrados.');
-    }
-
-    const cadastrarConsulta = this.consultaRepository.create({
-      ...input,
-      pet: pet[pet.length - 1],
-      produtos,
-      veterinarios,
-    });
-
-    const resultadoConsulta =
-      await this.consultaRepository.save(cadastrarConsulta);
-
-    return { resultadoConsulta };
-  }
-
-  async buscaCosulta(id: number): Promise<Consulta> {
-    const consulta = await this.consultaRepository.findOne({
-      where: { id },
-      relations: ['pet', 'produtos', 'veterinarios'],
-    });
-    console.log('Input Consultas: pet, produtos, veterinarios', consulta);
-    if (!consulta) {
+  async remove(id: number) {
+    const removerConsulta = await this.consultaRepository.findOneBy({ id });
+    if (!removerConsulta) {
       throw new NotFoundException(`Consulta com ID ${id} não encontrada.`);
     }
-    return consulta;
+    this.consultaRepository.remove(removerConsulta);
   }
 }
