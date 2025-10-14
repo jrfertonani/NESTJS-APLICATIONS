@@ -18,7 +18,7 @@ export class ProdutosService {
   }
 
   findAll() {
-    return this.produtoRepository.find();
+    return this.produtoRepository.find(); 
   }
 
   findOne(id: number) {

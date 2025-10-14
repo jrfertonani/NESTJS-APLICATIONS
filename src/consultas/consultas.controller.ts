@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ConsultasService } from './consultas.service';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
@@ -27,6 +28,12 @@ export class ConsultasController {
     if (!consulta) throw new Error(`ID ${id} not found!`);
     return consulta;
   }
+
+  @Get('tutor/busca')
+  async findConsultasByTutorName(@Query('name') nameTutor: string) {
+    return this.consultasService.findConsultasByTutorName(nameTutor);
+  }
+  
 
   @Get()
   findAll() {

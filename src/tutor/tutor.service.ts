@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Body, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
 import { Tutor } from './entities/tutor.entity';
 import type { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pet } from 'src/pets/entities/pet.entity';
 import { Produto } from 'src/produtos/entities/produto.entity';
+import type { CreateTutorDto } from './dto/create-tutor.dto';
 
 @Injectable()
 export class TutorService {
@@ -17,10 +18,10 @@ export class TutorService {
     private produtoRepository: Repository<Produto>,
   ) {}
 
-  // createTutor(createTutorDto: CreateTutorDto) {
-  //   const tutor = this.tutorRepository.create(createTutorDto);
-  //   return this.tutorRepository.save(tutor);
-  // }
+  createTutor(@Body() createTutorDto: CreateTutorDto) {
+    const tutor = this.tutorRepository.create(createTutorDto);
+    return this.tutorRepository.save(tutor);
+  }
 
   async addPetToExistingTutor(tutorId: number, petIds: number): Promise<Tutor> {
     const tutor = await this.tutorRepository.findOne({
@@ -73,7 +74,7 @@ export class TutorService {
 
     return this.tutorRepository.save(tutor);
   }
-  
+
   async findAll() {
     return await this.tutorRepository.find();
   }
@@ -82,7 +83,6 @@ export class TutorService {
     return await this.tutorRepository.findOneBy({ id });
   }
 
-  
   async findOneAnimal(id: number): Promise<Tutor | null> {
     const tutor = await this.tutorRepository.findOne({
       where: { id },

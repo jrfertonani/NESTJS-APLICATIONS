@@ -1,6 +1,14 @@
 import { Pet } from 'src/pets/entities/pet.entity';
 import { Produto } from 'src/produtos/entities/produto.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Consulta } from 'src/consultas/entities/consulta.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Tutor {
@@ -10,8 +18,11 @@ export class Tutor {
   @Column()
   name: string;
 
-  @Column({ nullable: true }) 
+  @Column({ nullable: true })
   email: string;
+
+  @Column({ nullable: true })
+  telefone: string;
 
   @OneToMany(() => Pet, (pet) => pet.tutor, {
     cascade: true,
@@ -22,4 +33,13 @@ export class Tutor {
     cascade: true,
   })
   produtos: Produto[];
+
+  @OneToMany(() => Consulta, (consulta) => consulta.tutor)
+  consultas: Consulta[];
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

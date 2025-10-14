@@ -8,7 +8,8 @@ POST http://localhost:3000/veterinario
 Content-Type: application/json
 
 {
-  "name": "Sebastião"
+  "name": "Sebastião",
+  "especialidade": "Cardiologia"
 }
 
 ###

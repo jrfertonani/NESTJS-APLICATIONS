@@ -2,10 +2,12 @@ import { Consulta } from 'src/consultas/entities/consulta.entity';
 import { Pet } from 'src/pets/entities/pet.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -15,6 +17,13 @@ export class Veterinario {
 
   @Column()
   name: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    default: 'Clínica Geral',
+  })
+  especialidade: string;
 
   @ManyToMany(() => Pet, (pet) => pet.veterinarios)
   @JoinTable({
@@ -26,4 +35,10 @@ export class Veterinario {
 
   @ManyToMany(() => Consulta, (consulta) => consulta.veterinarios)
   consultas: Consulta[];
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

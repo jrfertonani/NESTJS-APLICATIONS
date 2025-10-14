@@ -1,12 +1,44 @@
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsArray,
+} from 'class-validator';
+import { ConsultaStatus } from './consulta-status.enum';
+import { ConsultaTipo } from './consulta-tipo.enum';
 
 export class CreateConsultaDto {
-  @IsOptional()
-  @IsDateString() // Para definir o horário da consulta (ex: "2025-10-07T15:00:00Z")
-  dataConsulta?: string;
+  @IsNotEmpty({ message: 'A data e hora do agendamento são obrigatórias.' })
+  @IsDateString(
+    {},
+    {
+      message:
+        'A data e hora do agendamento devem ser uma string de data válida (ISO 8601).',
+    },
+  )
+  dataConsulta: string;
 
   @IsOptional()
-  @IsString()
+  @IsEnum(ConsultaStatus, { message: `Status inválido...` })
+  status?: ConsultaStatus;
+
+  @IsOptional()
+  @IsEnum(ConsultaTipo, { message: `Tipo inválido...` })
+  tipo?: ConsultaTipo;
+
+  @IsOptional()
+  @IsString({ message: 'O diagnóstico deve ser uma string.' })
+  diagnostico: string;
+
+  @IsOptional()
+  @IsString({ message: 'O tratamento deve ser uma string.' })
+  tratamento: string;
+
+  @IsOptional()
+  @IsString({ message: 'As observações devem ser uma string.' })
   observacoes?: string;
 
   @IsOptional()
@@ -27,6 +59,15 @@ export class CreateConsultaDto {
   petIds?: number[];
 
   @IsOptional()
+  @IsArray()
+  @IsNumber(
+    {},
+    { each: true, message: 'Cada item deve ser um ID numérico de tutor.' },
+  )
+  tutorIds?: number[];
+
+  @IsOptional()
+  @IsArray()
   @IsNumber(
     {},
     { each: true, message: 'Cada item deve ser um ID numérico de produto.' },

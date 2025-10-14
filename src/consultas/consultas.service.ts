@@ -5,14 +5,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, type Repository } from 'typeorm';
+import { In, Like, type Repository } from 'typeorm';
 import { Veterinario } from 'src/veterinario/entities/veterinario.entity';
+import { Tutor } from 'src/tutor/entities/tutor.entity';
 
 @Injectable()
 export class ConsultasService {
   constructor(
-    // @InjectRepository(Tutor)
-    // private tutorRepository: Repository<Tutor>,
+    @InjectRepository(Tutor)
+    private tutorRepository: Repository<Tutor>,
     @InjectRepository(Pet)
     private readonly petRepository: Repository<Pet>,
     @InjectRepository(Produto)
@@ -27,6 +28,14 @@ export class ConsultasService {
     const pet = await this.petRepository.findBy({ id: In(input.petIds || []) });
     if (input.petIds && pet.length !== input.petIds.length) {
       throw new NotFoundException('Um ou mais pets não foram encontrados.');
+    }
+
+    const tutor = await this.tutorRepository.findBy({
+      id: In(input.tutorIds || []),
+    });
+
+    if (input.tutorIds && tutor.length !== input.tutorIds.length) {
+      throw new NotFoundException('Um ou mais tutores não foram encontrados.');
     }
 
     const veterinarios = await this.veterinarioRepository.findBy({
@@ -51,12 +60,18 @@ export class ConsultasService {
     const cadastrarConsulta = this.consultaRepository.create({
       ...input,
       pet: pet[pet.length - 1],
+      tutor: tutor[tutor.length - 1],
       produtos,
       veterinarios,
     });
 
-    const resultadoConsulta =
+    const resultadoSalvo =
       await this.consultaRepository.save(cadastrarConsulta);
+
+    const resultadoConsulta = await this.consultaRepository.findOne({
+      where: { id: resultadoSalvo.id },
+      relations: ['pet', 'tutor', 'veterinarios', 'produtos'],
+    });
 
     return { resultadoConsulta };
   }
@@ -64,13 +79,36 @@ export class ConsultasService {
   async buscaCosulta(id: number): Promise<Consulta> {
     const consulta = await this.consultaRepository.findOne({
       where: { id },
-      relations: ['pet', 'produtos', 'veterinarios'],
+      relations: ['pet', 'produtos', 'veterinarios', 'tutor'],
     });
-    console.log('Input Consultas: pet, produtos, veterinarios', consulta);
+    console.log(
+      'Input Consultas: pet, produtos, veterinarios, tutor',
+      consulta,
+    );
     if (!consulta) {
       throw new NotFoundException(`Consulta com ID ${id} não encontrada.`);
     }
     return consulta;
+  }
+
+  async findConsultasByTutorName(nameTutor: string): Promise<Consulta[]> {
+    if (!nameTutor) {
+      return [];
+    }
+
+    const consultas = await this.consultaRepository.find({
+      relations: ['tutor', 'pet'],
+      where: {
+        tutor: {
+          name: Like(`%{nameTutor}%`),
+        },
+      },
+      order: {
+        dataConsulta: 'DESC',
+      },
+    });
+
+    return consultas;
   }
 
   findAll() {
@@ -84,7 +122,7 @@ export class ConsultasService {
     // 1. Encontrar a Consulta existente com os relacionamentos carregados
     const consulta = await this.consultaRepository.findOne({
       where: { id },
-      relations: ['pet', 'veterinarios', 'produtos'], // Carrega os arrays atuais
+      relations: ['pet', 'veterinarios', 'produtos', 'tutor'], // Carrega os arrays atuais
     });
 
     if (!consulta) {
@@ -107,6 +145,16 @@ export class ConsultasService {
 
       // Atribuição direta do objeto Pet (resolve o erro de array anterior)
       consulta.pet = pet;
+    }
+    // 3. ATUALIZAÇÃO DO RELACIONAMENTO ManyToOne (Tutor)
+    if (updateConsultaDto.tutorIds && updateConsultaDto.tutorIds.length > 0) {
+      const tutorId = updateConsultaDto.tutorIds[0];
+      const newTutor = await this.tutorRepository.findOneBy({ id: tutorId });
+
+      if (!newTutor) {
+        throw new NotFoundException(`Tutor com ID ${tutorId} não encontrado.`);
+      }
+      consulta.tutor = newTutor;
     }
 
     // 4. ATUALIZAÇÃO DO RELACIONAMENTO ManyToMany (Veterinarios)

@@ -1,14 +1,16 @@
 GET http://localhost:3000/produtos
 
 ###
-GET  http://localhost:3000/produtos/3
+GET  http://localhost:3000/produtos/10
 
 ###
 POST http://localhost:3000/produtos
 Content-Type: application/json
 
 {
-  "name": "Bola"
+    "name": "Dipirorex",
+    "categoria": "Medicamento",   
+    "descricao": "Tomar 18 vezes ao dia"
 }
 
 ###

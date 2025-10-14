@@ -1,38 +1,52 @@
 GET http://localhost:3000/consultas
 
 ###
-GET  http://localhost:3000/consultas/1
-
+GET  http://localhost:3000/consultas/49
 
 ###
+GET  http://localhost:3000/consultas/51
 
+###
+//findConsultasByTutorName
+GET http://localhost:3000/consultas/tutor/busca?name=Pedro
+
+###
 POST http://localhost:3000/consultas
 Content-Type: application/json
 
 {
-  "veterinarioIds": [4], 
-  "petIds": [9], 
-  "produtoIds": [3], 
-  "observacoes": "Gengivite leve, prescrevi anti-inflamatório.",
-  "dataConsulta": "2025-10-13"
+  "status": "Finalizada",
+  "tipo": "Vacinação",
+  "dataConsulta": "2025-10-13T01:57:26.000Z",
+  "diagnostico": "Teste",
+  "tratamento": "Teste",
+  "observacoes": "Consulta cadastro nova!",
+  "veterinarioIds": [5], 
+  "petIds": [1],
+  "tutorIds": [1], 
+  "produtoIds": [4], 
 }
 
 
-
 ###
-PATCH http://localhost:3000/consultas/1
+PATCH http://localhost:3000/consultas/49
 Content-Type: application/json
 
 {
+  "status": "Finalizada",
+  "tipo": "Vacinação",
+  "diagnostico": "Teste",
+  "tratamento": "Teste",
   "veterinarioIds": [5], 
-  "petIds": [1], 
+  "petIds": [1],
+  "tutorIds": [1], 
   "produtoIds": [4], 
   "observacoes": "Consulta alterada via PATCH",
   "dataConsulta": "2025-10-13T01:57:26.000Z"
 }
 
 ###
-DELETE  http://localhost:3000/consultas/40
+DELETE  http://localhost:3000/consultas/42
 
 
 

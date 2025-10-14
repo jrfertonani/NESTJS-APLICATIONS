@@ -16,6 +16,10 @@ export class CreateTutorDto {
   @IsEmail({}, { message: 'Formato de e-mail inválido.' })
   email: string;
 
+  @IsNotEmpty({ message: 'O telefone é obrigatório.' })
+  @IsString({ message: 'O telefone deve ser uma string.' })
+  telefone: string;
+
   @IsOptional()
   @IsArray({ message: 'A lista de IDs de pets deve ser um array.' })
   @IsNumber(
@@ -31,4 +35,12 @@ export class CreateTutorDto {
     { each: true, message: 'Cada item deve ser um ID numérico de produtos.' }, // 💡 each: true
   )
   produtoIds: number[];
+
+  @IsOptional()
+  @IsArray({ message: 'A lista de IDs de tutores deve ser um array.' })
+  @IsNumber(
+    {},
+    { each: true, message: 'Cada item deve ser um ID numérico de tutor.' }, // 💡 each: true
+  )
+  tutorIds: number[];
 }

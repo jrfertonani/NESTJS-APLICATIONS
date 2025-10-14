@@ -8,8 +8,12 @@ POST http://localhost:3000/pets
 Content-Type: application/json
 
 {
-  "name": "Pitoco"
+    "name": "Dog",      
+    "especie": "passarinho", 
+    "raca": "Canario",    
+    "idade": 2           
 }
+
 
 ###
 PATCH http://localhost:3000/pets/41

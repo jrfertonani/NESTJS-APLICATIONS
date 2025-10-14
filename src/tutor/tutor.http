@@ -17,8 +17,9 @@ POST http://localhost:3000/tutor
 Content-Type: application/json
 
 {
-  "name": "Nome do Tutor", 
-  "email": "email@teste.com",
+  "name": "Tutor Name",
+  "email": "email@example.com",
+  "telefone": "123456789"
 }
 
 ###
@@ -27,17 +28,18 @@ POST  http://localhost:3000/tutor/1/add-produtos
 Content-Type: application/json
 
 {
-  "produtoIds": 3
+  "produtoIds": 4
 }
 
 
 ###
-PATCH http://localhost:3000/tutor/1
+PATCH http://localhost:3000/tutor/69
 Content-Type: application/json
 
 {
-  "name": "Pedross",
+  "name": "Tutor Name",
   "email": "email@email.com",
+  "telefone": "123456789"
 }
 
 

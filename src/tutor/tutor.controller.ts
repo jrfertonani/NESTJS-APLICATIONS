@@ -8,18 +8,19 @@ import {
   Delete,
   NotFoundException,
 } from '@nestjs/common';
-import { TutorService } from './tutor.service';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
-import type { Tutor } from './entities/tutor.entity';
+import { CreateTutorDto } from './dto/create-tutor.dto';
+import { TutorService } from './tutor.service';
+import { Tutor } from './entities/tutor.entity';
 
 @Controller('tutor')
 export class TutorController {
   constructor(private readonly tutorService: TutorService) {}
 
-  // @Post()
-  // async create(@Body() createTutorDto: CreateTutorDto) {
-  //   return this.tutorService.createTutor(createTutorDto);
-  // }
+  @Post()
+  create(@Body() createTutorDto: CreateTutorDto) {
+    return this.tutorService.createTutor(createTutorDto);
+  }
 
   @Post(':id/add-produtos')
   async createTutoresProdutos(
